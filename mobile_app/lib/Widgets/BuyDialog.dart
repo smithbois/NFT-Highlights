@@ -1,0 +1,108 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Widgets/AppColors.dart';
+
+class BuyDialog extends StatefulWidget {
+  @override
+  _BuyDialogState createState() => _BuyDialogState();
+
+  final Highlight highlight;
+  BuyDialog(this.highlight);
+}
+
+class _BuyDialogState extends State<BuyDialog> {
+  bool loading = false;
+  TextEditingController controller = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
+
+    return Align(
+      child: SizedBox(
+        height: screenHeight / 4,
+        width: screenWidth / 1.2,
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Card(
+            color: AppColors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: screenHeight / 30),
+                Text(
+                  "Confirm Purchase",
+                  textScaleFactor: 1.0,
+                  style: TextStyle(
+                      color: AppColors.blackText, fontSize: screenHeight / 35),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "Confirm purchase for ${widget.highlight.price} XLM?",
+                  textScaleFactor: 1.0,
+                  style: TextStyle(
+                    color: AppColors.blackText, fontSize: screenHeight / 60,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Spacer(),
+                Row(
+                  children: [
+                    Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: screenWidth / 25,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.fromLTRB(screenWidth / 30, screenHeight / 100, screenWidth / 30, screenHeight / 100)),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor: MaterialStateProperty.all<Color>(AppColors.primary),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                      ),
+                      onPressed: () async {
+                        if (loading) return;
+                        setState(() {
+                          loading = true;
+                        });
+                        // TODO list for sale
+                      },
+                      child: loading ? CircularProgressIndicator(
+                        color: AppColors.white,
+                      )
+                          : Text(
+                        "Buy Now",
+                        style: TextStyle(
+                          fontSize: screenWidth / 25,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
+                SizedBox(height: screenHeight / 50),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

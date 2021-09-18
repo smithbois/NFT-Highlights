@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Widgets/AppButtons.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
+import 'package:mobile_app/Widgets/BuyDialog.dart';
+import 'package:mobile_app/Widgets/SellDialog.dart';
 import 'package:video_player/video_player.dart';
 
 class ViewHighlight extends StatefulWidget {
@@ -45,7 +48,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
         body: Column(
           children: [
             SizedBox(height: screenHeight / 38),
-            GestureDetector(
+            if (_controller.value.isInitialized) GestureDetector(
               onTap: () {
                 setState(() {
                   _controller.value.isPlaying
@@ -68,7 +71,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                     child: AnimatedOpacity(
                       child: Container(
                         child: Icon(
-                          _controller.value.isPlaying ? Icons.play_arrow : Icons.pause,
+                          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
                           color: Colors.white,
                           size: screenWidth / 8,
                         ),
@@ -81,7 +84,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
               ),
             ),
             SizedBox(height: screenHeight / 30),
-            widget.highlight.own ? Column(
+            widget.highlight.ownerAddress == AppUser.publicKey ? Column(
               children: [
                 Text(
                   "Last sold for ${widget.highlight.lastSold} XLM",
@@ -103,13 +106,26 @@ class _ViewHighlightState extends State<ViewHighlight> {
                 ),
                 SizedBox(height: screenHeight / 2.6),
                 AppButtons.getButton(() {
-                  //TODO// test//
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SellDialog(widget.highlight);
+                    },
+                  );
                 }, "List for Sale", screenWidth)
               ],
             ) : Column(
               children: [
                 Text(
-                  "Current highest bid: ${widget.highlight.currentPrice} XLM",
+                  "Sale price: ${widget.highlight.price} XLM",
+                  style: TextStyle(
+                    fontSize: screenHeight / 60,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                SizedBox(height: screenHeight / 200),
+                Text(
+                  "Last sold: ${widget.highlight.lastSold} XLM",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,
@@ -129,7 +145,13 @@ class _ViewHighlightState extends State<ViewHighlight> {
                 SizedBox(height: screenHeight / 2.6),
                 AppButtons.getButton(() {
                   //TODO
-                }, "Place a Bid", screenWidth)
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BuyDialog(widget.highlight);
+                    },
+                  );
+                }, "Buy Now", screenWidth)
               ],
             )
           ],

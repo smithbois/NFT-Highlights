@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Widgets/AppButtons.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
 import 'package:mobile_app/Widgets/AppTextField.dart';
@@ -12,9 +13,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  static String publicKey = "";
-  static String privateKey = "";
-
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -45,8 +43,8 @@ class _SignInState extends State<SignIn> {
             Spacer(),
             AppButtons.getButton(() {
               // TODO
-              publicKey = publicController.text;
-              privateKey = privateController.text;
+              AppUser.publicKey = publicController.text;
+              AppUser.privateKey = privateController.text;
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => Home()
               ));

@@ -1,28 +1,34 @@
 /*global chrome*/
 import React, { useState } from 'react'
-const fetch = require('node-fetch');
 const StellarSdk = require('stellar-sdk')
 const server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
 
 export default function User(props) {
     const cost = 100;
-    const url = window.location.href
 
     const [pubkey, setPubkey] = useState();
+    const [privkey, setPrivkey] = useState();
     const [buyState, setBuyState] = useState("initial");
-
     const [transaction, setTransaction] = useState()
 
     const handlePubkey = (event) => setPubkey(event.target.value);
+    const handlePrivkey = (event) => setPrivkey(event.target.value);
 
-    const handleBuy = async (event) => {
+    const handleBuy = (event) => {
         // makes a call to the backend to generate a new transaction that mints the NFT and lets the user buy it
         // TODO: get the current page url
-        let body = {
-            "clipperAddress": "GDRJBT4OGRFMXV6SYVUR36TCMVTTDCRU7IMMNQKJBF7Y4I4PDY4CA3PB",
-            "clipUrl": "https://www.twitch.tv/adinross/clip/CallousCogentPorpoiseTheThing-WkCwSNLkoVSCnOYk?filter=clips&range=30d&sort=time"
+        chrome.tabs.query({active: true}, (tabs) => {
+            console.log(tabs[0].url)
+            buildTx(tabs[0].url)
+        });
+    }
+
+    const buildTx = async (url) => {
+        const body = {
+            "clipperAddress": pubkey,
+            "clipUrl": url
         }
-        let response = await fetch('https://api.josephvitko.com/v1/highlights/nft/mint', {
+        const response = await fetch('https://api.josephvitko.com/v1/highlights/nft/mint', {
             method: 'post',
             body: JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
@@ -43,7 +49,7 @@ export default function User(props) {
     }
 
     const handleConfirm = async () => {
-        let userKeyPair = StellarSdk.Keypair.fromSecret("SA5CEHEYCS6TV6FOJEVBHYJVL3UMDOKK5IMW6GYIFWOOGKOBAMHN3M3N")
+        let userKeyPair = StellarSdk.Keypair.fromSecret(privkey)
         let tx2 = new StellarSdk.Transaction(transaction, 'Test SDF Network ; September 2015');
         tx2.sign(userKeyPair)
         console.log(tx2.toEnvelope().toXDR('base64'))
@@ -55,12 +61,8 @@ export default function User(props) {
             console.log(err)
             setBuyState("error")
         }
-
-
-
-
-
     }
+
     const handleCancel = () => {
         props.setView("landing")
         setBuyState("initial")
@@ -107,12 +109,12 @@ export default function User(props) {
                     <label>Public Key</label>
                     <input className="form-control" onChange={handlePubkey} />
                 </div>
+                <div className="form-group">
+                    <label>Private Key</label>
+                    <input className="form-control" onChange={handlePrivkey} />
+                </div>
                 <button className="btn btn-dark" onClick={handleBuy}>Buy</button>
             </div>
         </div>
     )
-}
-
-async function buildNftTransaction(setDidBuildTransactionSucceed) {
-
 }

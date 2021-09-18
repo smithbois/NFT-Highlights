@@ -1,28 +1,36 @@
 /*global chrome*/
 import React, { useState } from 'react'
-const fetch = require('node-fetch');
 const StellarSdk = require('stellar-sdk')
 const server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
 
 export default function User(props) {
     const cost = 100;
-    const url = window.location.href
 
     const [pubkey, setPubkey] = useState();
+    const [privkey, setPrivkey] = useState();
     const [buyState, setBuyState] = useState("initial");
-
     const [transaction, setTransaction] = useState()
+    const [err, setErr] = useState();
 
     const handlePubkey = (event) => setPubkey(event.target.value);
+    const handlePrivkey = (event) => setPrivkey(event.target.value);
 
-    const handleBuy = async (event) => {
+    const handleBuy = (event) => {
         // makes a call to the backend to generate a new transaction that mints the NFT and lets the user buy it
         // TODO: get the current page url
-        let body = {
-            "clipperAddress": "GDRJBT4OGRFMXV6SYVUR36TCMVTTDCRU7IMMNQKJBF7Y4I4PDY4CA3PB",
-            "clipUrl": "https://www.twitch.tv/adinross/clip/CallousCogentPorpoiseTheThing-WkCwSNLkoVSCnOYk?filter=clips&range=30d&sort=time"
+        chrome.tabs.query({active: true}, (tabs) => {
+            buildTx(tabs[0].url)
+        });
+    }
+
+    const buildTx = async (url) => {
+        console.log (pubkey, url)
+
+        const body = {
+            "clipperAddress": pubkey,
+            "clipUrl": url
         }
-        let response = await fetch('https://api.josephvitko.com/v1/highlights/nft/mint', {
+        const response = await fetch('https://api.josephvitko.com/v1/highlights/nft/mint', {
             method: 'post',
             body: JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
@@ -37,13 +45,13 @@ export default function User(props) {
             setBuyState("confirm")
         } else {
             // if it fails, show an error.
-            setBuyState("error")
+            setErr("An error has occurred")
         }
         console.log(response)
     }
 
     const handleConfirm = async () => {
-        let userKeyPair = StellarSdk.Keypair.fromSecret("SA5CEHEYCS6TV6FOJEVBHYJVL3UMDOKK5IMW6GYIFWOOGKOBAMHN3M3N")
+        let userKeyPair = StellarSdk.Keypair.fromSecret(privkey)
         let tx2 = new StellarSdk.Transaction(transaction, 'Test SDF Network ; September 2015');
         tx2.sign(userKeyPair)
         console.log(tx2.toEnvelope().toXDR('base64'))
@@ -55,12 +63,8 @@ export default function User(props) {
             console.log(err)
             setBuyState("error")
         }
-
-
-
-
-
     }
+
     const handleCancel = () => {
         props.setView("landing")
         setBuyState("initial")
@@ -71,7 +75,7 @@ export default function User(props) {
     if (buyState === "success") {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                <h4>Congratulations! You are now the owner of this NFT!</h4>
+                <p className="text-center">Congratulations! You are now the owner of this NFT!</p>
             </div>
         )
     }
@@ -79,19 +83,9 @@ export default function User(props) {
     if (buyState === "confirm") {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                <p>A transaction has been created, do you want to sign and confirm?</p>
+                <p className="text-center">A transaction has been created, sign and confirm?</p>
                 <div>
-                    <button className="btn btn-dark" onClick={handleConfirm}>Confirm</button>
-                    <button className="btn btn-danger" onClick={handleCancel}>Cancel</button>
-                </div>
-            </div>
-        )
-    }
-    if (buyState === "error") {
-        return (
-            <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                <p>An error occurred!</p>
-                <div>
+                    <button className="btn btn-success mr-2" onClick={handleConfirm}>Confirm</button>
                     <button className="btn btn-danger" onClick={handleCancel}>Cancel</button>
                 </div>
             </div>
@@ -99,20 +93,19 @@ export default function User(props) {
     }
 
     return (
-        <div className="d-flex flex-column h-100">
+        <div className="container d-flex flex-column h-100 justify-content-center">
             <h6>Buy this clip</h6>
             <p>Cost: {cost}</p>
-            <div>
-                <div className="form-group">
-                    <label>Public Key</label>
-                    <input className="form-control" onChange={handlePubkey} />
-                </div>
-                <button className="btn btn-dark" onClick={handleBuy}>Buy</button>
+            <div className="form-group">
+                <label className="pink">Public Key</label>
+                <input className="form-control" onChange={handlePubkey} />
             </div>
+            <div className="form-group">
+                <label className="pink">Private Key</label>
+                <input className="form-control" onChange={handlePrivkey} />
+            </div>
+            <small className="text-danger">{err}</small>
+            <button className="btn btn-pink" onClick={handleBuy}>Buy</button>
         </div>
     )
-}
-
-async function buildNftTransaction(setDidBuildTransactionSucceed) {
-
 }

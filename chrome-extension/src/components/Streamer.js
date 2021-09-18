@@ -1,15 +1,35 @@
 import React, { useState } from 'react'
+const StellarSdk = require('stellar-sdk')
+const server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
 
 export default function Streamer(props) {
     const [username, setUsername] = useState();
     const [pubkey, setPubkey] = useState();
     const [succ, setSucc] = useState(false);
+    const [err, setErr] = useState();
 
     const handleUsername = (event) => setUsername(event.target.value);
     const handlePubkey = (event) => setPubkey(event.target.value);
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         console.log(username, pubkey);
-        setSucc(true);
+
+        const body = {
+            "streamerAddress": pubkey,
+            "streamerUsername": username
+        }
+        const response = await fetch('https://api.josephvitko.com/v1/highlights/streamer/add', {
+            method: 'post',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        })
+        if (response.status === 200) {
+            setSucc(true);
+        } else {
+            setErr("An error has occurred")
+        }
+
+        console.log(response)
     }
 
     if (props.view != "streamer") return null;
@@ -23,19 +43,18 @@ export default function Streamer(props) {
     }
 
     return (
-        <div className="d-flex flex-column h-100">
-            <h6>Register Streamer</h6>
-            <div>
-                <div className="form-group">
-                    <label>Username</label>
-                    <input className="form-control" onChange={handleUsername} />
-                </div>
-                <div className="form-group">
-                    <label>Public Key</label>
-                    <input className="form-control" onChange={handlePubkey} />
-                </div>
-                <button className="btn btn-dark" onClick={handleSubmit}>Submit</button>
+        <div className="container d-flex flex-column h-100 justify-content-center">
+            <h6 className="pink">Register Streamer</h6>
+            <div className="form-group">
+                <label>Username</label>
+                <input className="form-control" onChange={handleUsername} />
             </div>
+            <div className="form-group">
+                <label>Public Key</label>
+                <input className="form-control" onChange={handlePubkey} />
+            </div>  
+            <small className="text-danger">{err}</small>
+            <button className="btn btn-pink" onClick={handleSubmit}>Submit</button>
         </div>
     )
 }

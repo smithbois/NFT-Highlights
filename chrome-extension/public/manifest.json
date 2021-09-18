@@ -10,9 +10,9 @@
         "default_title": "Open the popup"
     },
     "icons": {
-        "16": "logo192.png",
-        "48": "logo192.png",
-        "128": "logo192.png"
+        "16": "logo-small.png",
+        "48": "logo-small.png",
+        "128": "logo-small.png"
     },
     "content_security_policy": "script-src 'self' 'sha256-99cX7+n6Y+U3DJq4tOklEE61PEkfcKHGB/IwsT83aqU='; object-src 'self'",
     "permissions": [

@@ -5,18 +5,21 @@ const server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
 export default function Streamer(props) {
     const [username, setUsername] = useState();
     const [pubkey, setPubkey] = useState();
+    const [price, setPrice] = useState();
     const [succ, setSucc] = useState(false);
     const [err, setErr] = useState();
 
     const handleUsername = (event) => setUsername(event.target.value);
     const handlePubkey = (event) => setPubkey(event.target.value);
+    const handlePrice = (event) => setPrice(event.target.value);
 
     const handleSubmit = async (event) => {
         console.log(username, pubkey);
 
         const body = {
             "streamerAddress": pubkey,
-            "streamerUsername": username
+            "streamerUsername": username,
+            "clipPrice": parseFloat(price)
         }
         const response = await fetch('https://api.josephvitko.com/v1/highlights/streamer/add', {
             method: 'post',
@@ -29,7 +32,7 @@ export default function Streamer(props) {
             setErr("An error has occurred")
         }
 
-        console.log(response)
+        console.log(await response.text())
     }
 
     if (props.view != "streamer") return null;
@@ -52,6 +55,10 @@ export default function Streamer(props) {
             <div className="form-group">
                 <label>Public Key</label>
                 <input className="form-control" onChange={handlePubkey} />
+            </div> 
+            <div className="form-group">
+                <label>Clip Price</label>
+                <input className="form-control" onChange={handlePrice} />
             </div>  
             <small className="text-danger">{err}</small>
             <button className="btn btn-pink" onClick={handleSubmit}>Submit</button>

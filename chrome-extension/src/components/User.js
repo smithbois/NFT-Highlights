@@ -1,29 +1,30 @@
 /*global chrome*/
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 const StellarSdk = require('stellar-sdk')
 const server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
 
 export default function User(props) {
-    const cost = 100;
+    var url = null;
 
     const [pubkey, setPubkey] = useState();
     const [privkey, setPrivkey] = useState();
     const [buyState, setBuyState] = useState("initial");
     const [transaction, setTransaction] = useState()
+    const [cost, setCost] = useState();
     const [err, setErr] = useState();
 
     const handlePubkey = (event) => setPubkey(event.target.value);
     const handlePrivkey = (event) => setPrivkey(event.target.value);
 
-    const handleBuy = (event) => {
-        // makes a call to the backend to generate a new transaction that mints the NFT and lets the user buy it
-        // TODO: get the current page url
+    useEffect(() => {
         chrome.tabs.query({active: true}, (tabs) => {
-            buildTx(tabs[0].url)
+            url = tabs[0].url
+            getCost(url)
         });
-    }
+    });
 
-    const buildTx = async (url) => {
+    const handleBuy = async (event) => {
+        // makes a call to the backend to generate a new transaction that mints the NFT and lets the user buy it
         console.log (pubkey, url)
 
         const body = {
@@ -46,8 +47,25 @@ export default function User(props) {
         } else {
             // if it fails, show an error.
             setErr("An error has occurred")
+            console.log(await response.text())   
         }
-        console.log(response)
+    }
+
+    const getCost = async (url) => {
+        const name = url.split("/")[3]
+        const response = await fetch('https://api.josephvitko.com/v1/highlights/streamer/' + name, {
+            method: 'get',
+            headers: {'Content-Type': 'application/json'}
+        })
+        if (response.status === 200) {
+            let res = await response.json()
+            console.log(res.clipPrice)
+            setCost(res.clipPrice)
+        } else {
+            // if it fails, show an error.
+            setErr("An error has occurred")
+            console.log(await response.text())
+        }
     }
 
     const handleConfirm = async () => {

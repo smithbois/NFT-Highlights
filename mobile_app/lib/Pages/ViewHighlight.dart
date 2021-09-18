@@ -103,7 +103,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                 ),
                 SizedBox(height: screenHeight / 100),
                 AppButtons.getButton(() {
-
+                  //TODO
                 }, "List for Sale", screenWidth)
               ],
             ) : Column(
@@ -128,7 +128,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                 ),
                 SizedBox(height: screenHeight / 100),
                 AppButtons.getButton(() {
-
+                  //TODO
                 }, "Place a Bid", screenWidth)
               ],
             )

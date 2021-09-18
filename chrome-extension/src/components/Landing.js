@@ -5,10 +5,10 @@ export default function Landing(props) {
 
     return (
         <div className="d-flex flex-column justify-content-center align-items-center h-100">
-            <h4>Welcome to NFT Highlights</h4>
-            <div>
-                <button className="btn btn-dark" onClick={() => props.setView("streamer")}>streamer</button>
-                <button className="btn btn-dark" onClick={() => props.setView("user")}>user</button>
+            <img src="/logo.png" width="80%" />
+            <div className="mt-3">
+                <button className="btn btn-pink mr-2" onClick={() => props.setView("streamer")}>Streamer</button>
+                <button className="btn btn-pink" onClick={() => props.setView("user")}>User</button>
             </div>
         </div>
     )

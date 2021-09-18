@@ -9,9 +9,9 @@ export default function Page() {
 
     return (
         <div className="h-100">
-            {/* <Landing />
-            <Streamer />
-            <User /> */}
+            <Landing view={view} setView={setView} />
+            <Streamer view={view} setView={setView}/>
+            <User view={view} setView={setView}/>
         </div>
     )
 }

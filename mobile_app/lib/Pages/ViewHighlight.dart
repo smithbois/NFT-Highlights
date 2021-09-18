@@ -101,7 +101,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   icon: Icon(Icons.copy),
                   label: Text("Copy Hash"),
                 ),
-                SizedBox(height: screenHeight / 100),
+                SizedBox(height: screenHeight / 2.6),
                 AppButtons.getButton(() {
                   //TODO
                 }, "List for Sale", screenWidth)
@@ -126,7 +126,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   icon: Icon(Icons.copy),
                   label: Text("Copy Hash"),
                 ),
-                SizedBox(height: screenHeight / 100),
+                SizedBox(height: screenHeight / 2.6),
                 AppButtons.getButton(() {
                   //TODO
                 }, "Place a Bid", screenWidth)

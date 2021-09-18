@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+
+    "name": "NFT Hightlights",
+    "description": "This extension is a starting point to create a real Chrome extension",
+    "version": "0.0.1",
+
+    "browser_action": {
+        "default_popup": "index.html",
+        "default_title": "Open the popup"
+    },
+    "icons": {
+        "16": "logo192.png",
+        "48": "logo192.png",
+        "128": "logo192.png"
+    },
+    "content_security_policy": "script-src 'self' 'sha256-aOAE/B6H6b4uO9mKTuZvdENDlB/mmw5tEaxXNGyAvig='; object-src 'self'",
+    "permissions": [
+    ]
+}

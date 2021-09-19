@@ -102,7 +102,7 @@ class StellarInterface {
     Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
 
     Transaction transaction = new TransactionBuilder(seller)
-      .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, "1", '100').build())
+      .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, "1", price).build())
       .build();
 
     transaction.sign(senderKeyPair, Network.TESTNET);
@@ -118,7 +118,7 @@ class StellarInterface {
 
     Transaction transaction = new TransactionBuilder(buyer)
         .addOperation(ChangeTrustOperationBuilder(nft, "100").build())
-        .addOperation(ManageBuyOfferOperationBuilder(Asset.NATIVE, nft, "1", "100").build())
+        .addOperation(ManageBuyOfferOperationBuilder(Asset.NATIVE, nft, "1", price).build())
         .build();
 
     transaction.sign(senderKeyPair, Network.TESTNET);

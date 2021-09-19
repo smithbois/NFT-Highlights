@@ -128,6 +128,21 @@ class StellarInterface {
     return(response.success);
   }
 
+  static removeTokenFromSale(String issuerAddress, String price) async {
+    KeyPair senderKeyPair = KeyPair.fromSecretSeed(AppUser.privateKey);
+
+    AccountResponse seller = await StellarSDK.TESTNET.accounts.account(senderKeyPair.accountId);
+    Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
+
+    Transaction transaction = new TransactionBuilder(seller)
+        .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, "0", price).build())
+        .build();
+
+    transaction.sign(senderKeyPair, Network.TESTNET);
+    SubmitTransactionResponse response = await StellarSDK.TESTNET.submitTransaction(transaction);
+    return(response.success);
+  }
+
   static purchaseToken(String issuerAddress, String price) async {
     KeyPair senderKeyPair = KeyPair.fromSecretSeed(AppUser.privateKey);
 

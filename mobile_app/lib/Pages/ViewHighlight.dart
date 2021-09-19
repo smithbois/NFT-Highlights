@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppButtons.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
 import 'package:mobile_app/Widgets/BuyDialog.dart';
@@ -153,7 +154,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                       return CustomDialog("Remove listing?", "Are you sure you want to\nremove your NFT from the market?", "Cancel", "Confirm", () {
                         Navigator.of(context).pop();
                       }, () {
-                        // TODO remove from blockchain
+                        bool removeSucceeded = StellarInterface.removeTokenFromSale(widget.highlight.issuerAddress, widget.highlight.price.toString());
                         widget.highlight.price = null;
                       });
                     },

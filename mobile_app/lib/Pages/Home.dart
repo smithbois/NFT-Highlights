@@ -42,6 +42,8 @@ class _HomeState extends State<Home> {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
+    String balance = "1,000 XLM"; //TODO
+
     List<Widget> recommendedListWidgets = [SizedBox(width: 12)];
     for (Highlight h in recommendedList) {
       recommendedListWidgets.add(getClipPreview(h, screenHeight, screenWidth));
@@ -73,6 +75,25 @@ class _HomeState extends State<Home> {
         backgroundColor: AppColors.gray,
         body: Column(
           children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Text(
+                        balance,
+                        style: TextStyle(
+                          fontSize: screenHeight / 50,
+                        ),
+                      ),
+                      SizedBox(width: 30),
+                    ],
+                  )
+                ],
+              )
+            ),
             Spacer(),
             Align(
               alignment: Alignment.centerLeft,

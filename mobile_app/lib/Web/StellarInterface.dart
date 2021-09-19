@@ -78,7 +78,7 @@ class StellarInterface {
           if (obr.asks != null && obr.asks!.isNotEmpty) {
             print('getting price');
             price = double.parse(obr.asks![0]!.price!);
-            print('got price');
+            print('got price: $price');
           } else {
             price = null;
           }

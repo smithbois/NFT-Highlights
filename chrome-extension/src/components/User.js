@@ -8,16 +8,17 @@ export default function User(props) {
 
     const [pubkey, setPubkey] = useState();
     const [privkey, setPrivkey] = useState();
-    const [buyState, setBuyState] = useState("initial");
+    const [view, setView] = useState("initial");
     const [transaction, setTransaction] = useState()
     const [cost, setCost] = useState();
+    const [balance, setBalance] = useState();
     const [err, setErr] = useState();
 
     const handlePubkey = (event) => setPubkey(event.target.value);
     const handlePrivkey = (event) => setPrivkey(event.target.value);
 
     useEffect(() => {
-        chrome.tabs.query({active: true, lastFocusedWindow: true}, (tabs) => {
+        chrome.tabs.query({active: true}, (tabs) => {
             url = tabs[0].url
             getCost(url)
         });
@@ -43,14 +44,20 @@ export default function User(props) {
             let t = StellarSdk.xdr.TransactionEnvelope.fromXDR(xdr, "base64")
             console.log(typeof t)
             setTransaction(t)
-            setBuyState("confirm")
+            setView("confirm")
         } else {
             // if it fails, show an error.
             setErr("An error has occurred")
             console.log(await response.text())   
         }
+    }
 
-        getBalance()
+    const handleConnect = async () => {
+        const acc = await server.loadAccount(pubkey)
+        const targetBalance = acc.balances.filter(bal => bal.asset_type == "native")
+        console.log(targetBalance[0].balance)
+        setBalance(targetBalance[0].balance)
+        setView("buy")
     }
 
     const getCost = async (url) => {
@@ -70,12 +77,6 @@ export default function User(props) {
         }
     }
 
-    const getBalance = async () => {
-        const acc = await server.loadAccount(pubkey)
-        const balance = acc.balances.filter(bal => bal.asset_type == "native")
-        return balance[0].balance
-    }
-
     const handleConfirm = async () => {
         const userKeyPair = StellarSdk.Keypair.fromSecret(privkey)
         const tx2 = new StellarSdk.Transaction(transaction, 'Test SDF Network ; September 2015');
@@ -84,7 +85,7 @@ export default function User(props) {
         try {
             const transactionResult = await server.submitTransaction(tx2)
             console.log(transactionResult)
-            setBuyState("success")
+            setView("success")
         } catch (err) {
             console.log(err)
             setErr("An error has occurred")
@@ -93,20 +94,20 @@ export default function User(props) {
 
     const handleCancel = () => {
         props.setView("landing")
-        setBuyState("initial")
+        setView("initial")
     }
 
-    if (buyState === "success") {
+    if (view === "success") {
         return (
-            <div className="d-flex flex-column justify-content-center align-items-center h-100">
+            <div className="container d-flex flex-column justify-content-center align-items-center h-100">
                 <p className="text-center">Congratulations! You are now the owner of this NFT!</p>
             </div>
         )
     }
 
-    if (buyState === "confirm") {
+    if (view === "confirm") {
         return (
-            <div className="d-flex flex-column justify-content-center align-items-center h-100">
+            <div className="container d-flex flex-column justify-content-center align-items-center h-100">
                 <p className="text-center">A transaction has been created, sign and confirm?</p>
                 <small className="text-danger">{err}</small>
                 <div>
@@ -117,10 +118,21 @@ export default function User(props) {
         )
     }
 
+    if (view === "buy") {
+        return (
+            <div className="container d-flex flex-column h-100 pt-3">
+                <h6>Buy this clip</h6>
+                <p>Cost: {cost}</p>
+                <p>Your Balance: {balance}</p>
+                <small className="text-danger">{err}</small>
+                <button className="btn btn-pink" onClick={handleBuy}>Buy</button>
+            </div>
+        )
+    }
+
     return (
-        <div className="container d-flex flex-column h-100 justify-content-center">
-            <h6>Buy this clip</h6>
-            <p>Cost: {cost}</p>
+        <div className="container d-flex flex-column h-100 pt-3">
+            <h6>Connect</h6>
             <div className="form-group">
                 <label className="pink">Public Key</label>
                 <input className="form-control" onChange={handlePubkey} />
@@ -129,8 +141,7 @@ export default function User(props) {
                 <label className="pink">Private Key</label>
                 <input className="form-control" onChange={handlePrivkey} />
             </div>
-            <small className="text-danger">{err}</small>
-            <button className="btn btn-pink" onClick={handleBuy}>Buy</button>
+            <button className="btn btn-pink" onClick={handleConnect}>Connect</button>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Pages/ViewHighlight.dart';
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
-    String balanceText = "$balance XLM"; //TODO: Formatting
+    String balanceText = "${NumberFormat("###,###.0").format(balance)} XLM";
     print(balanceText);
 
     List<Widget> recommendedListWidgets = [SizedBox(width: 12)];

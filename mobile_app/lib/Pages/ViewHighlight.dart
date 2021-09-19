@@ -153,9 +153,29 @@ class _ViewHighlightState extends State<ViewHighlight> {
                     builder: (BuildContext context) {
                       return CustomDialog("Remove listing?", "Are you sure you want to\nremove your NFT from the market?", "Cancel", "Confirm", () {
                         Navigator.of(context).pop();
-                      }, () {
-                        bool removeSucceeded = StellarInterface.removeTokenFromSale(widget.highlight.issuerAddress, widget.highlight.price.toString());
-                        widget.highlight.price = null;
+                      }, () async {
+                        bool removeSucceeded = await StellarInterface.removeTokenFromSale(widget.highlight.issuerAddress, widget.highlight.price.toString());
+                        Navigator.of(context).pop();
+                        if (removeSucceeded) {
+                          widget.highlight.price = null;
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialog("Success", "Your NFT has successfully been pulled from the market!", "", "Done", null, () {
+                                Navigator.of(context).pop();
+                              });
+                            }
+                          );
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CustomDialog("Error", "There was an error", "", "Done", null, () {
+                                  Navigator.of(context).pop();
+                                });
+                              }
+                          );
+                        }
                       });
                     },
                   );

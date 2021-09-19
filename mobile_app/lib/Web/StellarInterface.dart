@@ -90,7 +90,7 @@ class StellarInterface {
 
     transaction.sign(senderKeyPair, Network.TESTNET);
     SubmitTransactionResponse response = await StellarSDK.TESTNET.submitTransaction(transaction);
-    print(response.strResultXdr);
+    return(response.success);
   }
 
   static purchaseToken(String issuerAddress, String price) async {
@@ -106,7 +106,7 @@ class StellarInterface {
 
     transaction.sign(senderKeyPair, Network.TESTNET);
     SubmitTransactionResponse response = await StellarSDK.TESTNET.submitTransaction(transaction);
-    print(response.success);
+    return(response.success);
   }
 
   static getTwitchAuth() async {

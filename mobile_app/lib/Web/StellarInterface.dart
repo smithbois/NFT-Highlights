@@ -57,8 +57,19 @@ class StellarInterface {
           String hash = account.hashCode.toString();
           // https://clips-media-assets2.twitch.tv/AT-cm%7C1323884122-preview-480x272.jpg
 
+          // check if there is an active sell order for the highlight
+          Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
+          OrderBookResponse obr = await StellarSDK.TESTNET.orderBook.sellingAsset(nft).buyingAsset(Asset.NATIVE).execute();
+          double? price;
+          if (obr.asks != null) {
+            price = double.parse(obr.asks![0]!.price!);
+          } else {
+            price = null;
+          }
+
+
           print(issuerAddress);
-          Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), double.parse(lastSold), ownerAddress, hash, thumbnailUrl, issuerAddress);
+          Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), price, ownerAddress, hash, thumbnailUrl, issuerAddress);
           ownedHighlights.add(h);
 
 
@@ -85,6 +96,7 @@ class StellarInterface {
     Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
 
     Transaction transaction = new TransactionBuilder(seller)
+      .addOperation(ChangeTrustOperationBuilder(nft, "100").build())
       .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, "1", '100').build())
       .build();
 

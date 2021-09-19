@@ -37,14 +37,14 @@ export default function Streamer(props) {
 
     if (succ) {
         return (
-            <div className="d-flex flex-column justify-content-center align-items-center h-100">
+            <div className="container d-flex flex-column justify-content-center align-items-center h-100">
                 <h4>You are registered!</h4>
             </div>
         )
     }
 
     return (
-        <div className="container d-flex flex-column h-100 justify-content-center">
+        <div className="container d-flex flex-column h-100 pt-3">
             <h6 className="pink">Register Streamer</h6>
             <div className="form-group">
                 <label>Username</label>

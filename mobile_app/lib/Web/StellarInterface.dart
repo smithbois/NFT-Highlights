@@ -61,8 +61,10 @@ class StellarInterface {
           Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
           OrderBookResponse obr = await StellarSDK.TESTNET.orderBook.sellingAsset(nft).buyingAsset(Asset.NATIVE).execute();
           double? price;
-          if (obr.asks != null) {
+          if (obr.asks != null && obr.asks!.isNotEmpty) {
+            print('getting price');
             price = double.parse(obr.asks![0]!.price!);
+            print('got price');
           } else {
             price = null;
           }

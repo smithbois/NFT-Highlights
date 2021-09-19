@@ -23,18 +23,22 @@ class _ViewHighlightState extends State<ViewHighlight> {
 
   @override
   void initState() {
-    super.initState();
     _controller = VideoPlayerController.network(
         widget.highlight.url)
       ..initialize().then((_) {
         setState(() {});
       });
+    _controller.play();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+
+    print(widget.highlight.price);
+
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -121,14 +125,16 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   label: Text("Copy Hash"),
                 ),
                 SizedBox(height: screenHeight / 3.2),
-                AppButtons.getButton(() {
+                widget.highlight.price == null ? AppButtons.getButton(() {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return SellDialog(widget.highlight);
                     },
                   );
-                }, "List for Sale", screenWidth)
+                }, "List for sale", screenWidth) : AppButtons.getButton(() {
+                  // TODO
+                }, "Remove from listing", screenWidth)
               ],
             ) : Column(
               children: [
@@ -149,6 +155,14 @@ class _ViewHighlightState extends State<ViewHighlight> {
                 SizedBox(height: screenHeight / 100),
                 Text(
                   "Last sold for ${NumberFormat("###,###.0").format(widget.highlight.lastSold)} XLM",
+                  style: TextStyle(
+                    fontSize: screenHeight / 60,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                if (widget.highlight.price != null) SizedBox(height: screenHeight / 100),
+                if (widget.highlight.price != null) Text(
+                  "Your current listing: ${NumberFormat("###,###.0").format(widget.highlight.price)} XLM",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,

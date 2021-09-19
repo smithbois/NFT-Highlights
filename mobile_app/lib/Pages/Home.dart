@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Pages/ViewHighlight.dart';
@@ -53,6 +54,16 @@ class _HomeState extends State<Home> {
       ownedClipsListWidgets.add(SizedBox(width: 12));
     }
 
+    print(ownedClipsListWidgets.length);
+    if (recommendedListWidgets.length == 1)
+      recommendedListWidgets = [
+        CircularProgressIndicator(color: AppColors.white),
+      ];
+    if (ownedClipsListWidgets.length == 1)
+      ownedClipsListWidgets = [
+        CircularProgressIndicator(color: AppColors.white),
+      ];
+
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -60,56 +71,55 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.gray,
-        body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(
-                    "Recommended Highlights For Sale",
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: screenHeight / 50,
-                      fontWeight: FontWeight.bold,
-                    ),
+        body: Column(
+          children: [
+            Spacer(),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                child: Text(
+                  "Recommended Highlights For Sale",
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: screenHeight / 50,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: recommendedListWidgets,
-                ),
+            ),
+            SizedBox(height: 10),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: recommendedListWidgets,
               ),
+            ),
 
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(
-                    "Your Highlights",
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: screenHeight / 50,
-                      fontWeight: FontWeight.bold,
-                    ),
+            SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                child: Text(
+                  "Your Highlights",
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: screenHeight / 50,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: ownedClipsListWidgets,
-                ),
+            ),
+            SizedBox(height: 10),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: ownedClipsListWidgets,
               ),
-            ],
-          ),
+            ),
+            Spacer(),
+          ],
         ),
       ),
     );

@@ -1,18 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/Models/Highlight.dart';
-import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
 
-class BuyDialog extends StatefulWidget {
+class CustomDialog extends StatefulWidget {
   @override
-  _BuyDialogState createState() => _BuyDialogState();
+  _CustomDialogState createState() => _CustomDialogState();
 
-  final Highlight highlight;
-  BuyDialog(this.highlight);
+  final String title;
+  final String description;
+  final String left;
+  final String right;
+  final Function()? leftFunc;
+  final Function()? rightFunc;
+  CustomDialog(this.title, this.description, this.left, this.right, this.leftFunc, this.rightFunc);
 }
 
-class _BuyDialogState extends State<BuyDialog> {
+class _CustomDialogState extends State<CustomDialog> {
   bool loading = false;
   TextEditingController controller = new TextEditingController();
 
@@ -38,14 +41,17 @@ class _BuyDialogState extends State<BuyDialog> {
               children: [
                 SizedBox(height: screenHeight / 30),
                 Text(
-                  "Confirm Purchase",
+                  widget.title,
                   style: TextStyle(
                       color: AppColors.blackText, fontSize: screenHeight / 35),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 5),
                 Text(
-                  "Confirm purchase for ${widget.highlight.price} XLM?",
+                  widget.description,
+                  overflow: TextOverflow.fade,
+                  maxLines: 3,
+                  softWrap: false,
                   style: TextStyle(
                     color: AppColors.blackText, fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,
@@ -56,12 +62,10 @@ class _BuyDialogState extends State<BuyDialog> {
                 Row(
                   children: [
                     Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                    if (widget.leftFunc != null) TextButton(
+                      onPressed: widget.leftFunc,
                       child: Text(
-                        "Cancel",
+                        widget.left,
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontSize: screenWidth / 25,
@@ -76,19 +80,9 @@ class _BuyDialogState extends State<BuyDialog> {
                         backgroundColor: MaterialStateProperty.all<Color>(AppColors.primary),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
                       ),
-                      onPressed: () async {
-                        if (loading) return;
-                        setState(() {
-                          loading = true;
-                        });
-                        await StellarInterface.purchaseToken(widget.highlight.issuerAddress, "100");
-                        // TODO: Success dialog
-                      },
-                      child: loading ? CircularProgressIndicator(
-                        color: AppColors.white,
-                      )
-                          : Text(
-                        "Buy Now",
+                      onPressed: widget.rightFunc,
+                      child: Text(
+                        widget.right,
                         style: TextStyle(
                           fontSize: screenWidth / 25,
                         ),

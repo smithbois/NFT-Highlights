@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
+import 'package:mobile_app/Widgets/CustomDialog.dart';
 
 class SellDialog extends StatefulWidget {
   @override
@@ -21,8 +22,6 @@ class _SellDialogState extends State<SellDialog> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
-    // TODO: Get the price from the textbook
 
     return Align(
       child: SizedBox(
@@ -48,7 +47,6 @@ class _SellDialogState extends State<SellDialog> {
                     alignment: Alignment.center,
                     child: Text(
                       "* Please enter a price",
-                      textScaleFactor: 1.0,
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: screenHeight/60,
@@ -90,8 +88,30 @@ class _SellDialogState extends State<SellDialog> {
                           setState(() {
                             loading = true;
                           });
-                          await StellarInterface.putTokenForSale(widget.highlight.issuerAddress, "100");
-                          // TODO: Success message
+                          bool wasSuccessful = await StellarInterface.putTokenForSale(widget.highlight.issuerAddress, controller.text);
+                          print(controller.text);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          if (wasSuccessful) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                widget.highlight.price = double.parse(controller.text);
+                                return CustomDialog("Successfully Listed", "NFT has successfully been listed for\n${controller.text} XLM!", "", "Done", null, () {
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CustomDialog("An Error Occurred", "NFT listing has had an error.", "", "Done", null, () {
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                            );
+                          }
                         }
                       },
                       child: loading ? CircularProgressIndicator(
@@ -123,7 +143,6 @@ class _SellDialogState extends State<SellDialog> {
         children: [
           Text(
             question,
-            textScaleFactor: 1.0,
             style: TextStyle(
                 color: AppColors.blackText, fontSize: screenHeight / 35),
             textAlign: TextAlign.center,
@@ -131,7 +150,6 @@ class _SellDialogState extends State<SellDialog> {
           SizedBox(height: 5),
           Text(
             "Last sold for ${widget.highlight.lastSold} XLM",
-            textScaleFactor: 1.0,
             style: TextStyle(
               color: AppColors.blackText, fontSize: screenHeight / 60,
               fontStyle: FontStyle.italic,

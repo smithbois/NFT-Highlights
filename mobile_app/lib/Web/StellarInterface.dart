@@ -69,6 +69,10 @@ class StellarInterface {
             price = null;
           }
 
+          if (!isOwned && price == null) {
+            break;
+          }
+
 
           print(issuerAddress);
           Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), price, ownerAddress, hash, thumbnailUrl, issuerAddress);

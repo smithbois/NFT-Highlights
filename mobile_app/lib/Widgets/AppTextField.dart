@@ -19,7 +19,7 @@ class AppTextField {
           top: 7,
           width: screenWidth * .8,
           child: TextField(
-            //controller: controller,
+            controller: controller,
             style: TextStyle(color: AppColors.white, fontSize: screenHeight / 50),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(screenHeight/60),

@@ -13,13 +13,21 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  late TextEditingController publicController;
+  late TextEditingController privateController;
+
+  @override
+  void initState() {
+    publicController = new TextEditingController();
+    privateController = new TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
-    TextEditingController publicController = new TextEditingController();
-    TextEditingController privateController = new TextEditingController();
 
     return GestureDetector(
       onTap: () {
@@ -42,7 +50,6 @@ class _SignInState extends State<SignIn> {
             AppTextField.getTextField(privateController, "Private Key", screenHeight, screenWidth),
             Spacer(),
             AppButtons.getButton(() {
-              // TODO
               AppUser.publicKey = publicController.text;
               AppUser.privateKey = privateController.text;
               Navigator.of(context).push(MaterialPageRoute(

@@ -9,15 +9,19 @@ import 'Home.dart';
 
 class SignIn extends StatefulWidget {
   @override
-  _SignInState createState() => _SignInState();
+  SignInState createState() => SignInState();
 }
 
-class _SignInState extends State<SignIn> {
+class SignInState extends State<SignIn> {
   late TextEditingController publicController;
   late TextEditingController privateController;
 
   // for testing purposes only
   bool userWalletSelected = false;
+  static final String user1Pub = "GC3TFFTOOBRY2SL2DR7RTIXKZ52N2AWLEAAXI4KI36MDXWMLU6LEFAJF";
+  static final String user1Priv = "SCOVEM5SHPYCZBEM3FZDX3C7CZ3PLORACGSDGR3QWN6LQEFM3LOYS7LH";
+  static final String user2Pub = "GC3BVLOPHWNUH5WQOLT5DZLVUSSF3IP32INK6X5UC2ALJMNDOK56X473";
+  static final String user2Priv = "SD4IPDD22BMW2SRIDI4JCRV2DBPMPGVQWY6N65DXQV64P7FXN4J6PZKV";
 
   @override
   void initState() {
@@ -47,19 +51,19 @@ class _SignInState extends State<SignIn> {
               onTap: () {
                 // For testing purposes, prefill keys for a user wallet
                 if (!userWalletSelected) {
-                  publicController.text = "GC3MFYNYKFNIGR5SDCERGUDTUO644XTNJAHLSVOIU4KMC6JY5O4Q7GAC";
-                  privateController.text = "SAVNYFPJYPPGYSASJE24V5F5RKI3C25CAAC33BD6DDVNCJAWQJQTXNM6";
-                  AppUser.recommendedPublicKey = "GBDZLZW3DGVD7B75K4B5X5EFXUNQVNIXYKX2YZLRB2EXJ6TND4VYVDAY";
-                  AppUser.recommendedPrivateKey = "SB3KH4K7JIOZSZROGR6LF5PMJ6CWZOWI7JTB5T7ZMS4NGRUQ2ECGAHQD";
+                  publicController.text = user1Pub;
+                  privateController.text = user1Priv;
+                  AppUser.recommendedPublicKey = user2Pub;
+                  AppUser.recommendedPrivateKey = user2Priv;
                   this.setState(() {
                     userWalletSelected = true;
                   });
                 } else {
                   // for testing only, prefill keys for the reccomended wallet
-                  publicController.text = "GBDZLZW3DGVD7B75K4B5X5EFXUNQVNIXYKX2YZLRB2EXJ6TND4VYVDAY";
-                  privateController.text = "SB3KH4K7JIOZSZROGR6LF5PMJ6CWZOWI7JTB5T7ZMS4NGRUQ2ECGAHQD";
-                  AppUser.recommendedPublicKey = "GC3MFYNYKFNIGR5SDCERGUDTUO644XTNJAHLSVOIU4KMC6JY5O4Q7GAC";
-                  AppUser.recommendedPrivateKey = "SAVNYFPJYPPGYSASJE24V5F5RKI3C25CAAC33BD6DDVNCJAWQJQTXNM6";
+                  publicController.text = user2Pub;
+                  privateController.text = user2Priv;
+                  AppUser.recommendedPublicKey = user1Pub;
+                  AppUser.recommendedPrivateKey = user1Priv;
                   this.setState(() {
                     userWalletSelected = false;
                   });

@@ -1,5 +1,6 @@
 
 import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Pages/SignIn.dart';
 
 class AppUser {
   static String publicKey = "";
@@ -7,7 +8,7 @@ class AppUser {
   static List<Highlight> ownedHighlights = [];
   static double balance = 0;
 
-  static String recommendedPublicKey = "GBDZLZW3DGVD7B75K4B5X5EFXUNQVNIXYKX2YZLRB2EXJ6TND4VYVDAY";
-  static String recommendedPrivateKey = "SB3KH4K7JIOZSZROGR6LF5PMJ6CWZOWI7JTB5T7ZMS4NGRUQ2ECGAHQD";
+  static String recommendedPublicKey = SignInState.user2Pub;
+  static String recommendedPrivateKey = SignInState.user2Priv;
   static List<Highlight> recommendedHighlights = [];
 }

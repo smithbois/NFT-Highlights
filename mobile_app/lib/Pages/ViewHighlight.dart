@@ -164,7 +164,8 @@ class _ViewHighlightState extends State<ViewHighlight> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return CustomDialog("Success", "Your NFT has successfully been pulled from the market!", "", "Done", null, () {
+                              return CustomDialog("Success", "Your NFT has successfully been\npulled from the market!", "", "Done", null, () {
+                                Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                               });
                             }

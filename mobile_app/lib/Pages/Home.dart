@@ -194,7 +194,7 @@ class HomeState extends State<Home> {
                     SizedBox(
                       width: screenWidth / 3,
                       child: Text(
-                        "${highlight.lastSold} XLM",
+                        highlight.price == null ? "${highlight.lastSold} XLM" : "${highlight.price} XLM",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: screenHeight / 60,

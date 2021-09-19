@@ -47,19 +47,19 @@ class _SignInState extends State<SignIn> {
               onTap: () {
                 // For testing purposes, prefill keys for a user wallet
                 if (!userWalletSelected) {
-                  publicController.text = "GB6LX4OCRXIPK2AZTUGUMZI4AKWE2I6UDCJ3H26BRY5ZSS4FGZCEBBPN";
-                  privateController.text = "SA3WJAENZCZ4FNV7NSQTDRSTESYSXGE37BIZHMIVASH3WDEW6MZF32P4";
-                  AppUser.recommendedPublicKey = "GA6T4UQPRBE3ZCVGWKEOHRDDNPY2NHA7Q5QNHTFZVPHEBRRXN5PP4MKQ";
-                  AppUser.recommendedPrivateKey = "SBRKXHAXYRUK74ARFFJFTNXGWJPCTNBIVZXQWRTYMVJR7UQLUHENOA3Z";
+                  publicController.text = "GC3MFYNYKFNIGR5SDCERGUDTUO644XTNJAHLSVOIU4KMC6JY5O4Q7GAC";
+                  privateController.text = "SAVNYFPJYPPGYSASJE24V5F5RKI3C25CAAC33BD6DDVNCJAWQJQTXNM6";
+                  AppUser.recommendedPublicKey = "GBDZLZW3DGVD7B75K4B5X5EFXUNQVNIXYKX2YZLRB2EXJ6TND4VYVDAY";
+                  AppUser.recommendedPrivateKey = "SB3KH4K7JIOZSZROGR6LF5PMJ6CWZOWI7JTB5T7ZMS4NGRUQ2ECGAHQD";
                   this.setState(() {
                     userWalletSelected = true;
                   });
                 } else {
                   // for testing only, prefill keys for the reccomended wallet
-                  publicController.text = "GA6T4UQPRBE3ZCVGWKEOHRDDNPY2NHA7Q5QNHTFZVPHEBRRXN5PP4MKQ";
-                  privateController.text = "SBRKXHAXYRUK74ARFFJFTNXGWJPCTNBIVZXQWRTYMVJR7UQLUHENOA3Z";
-                  AppUser.recommendedPublicKey = "GB6LX4OCRXIPK2AZTUGUMZI4AKWE2I6UDCJ3H26BRY5ZSS4FGZCEBBPN";
-                  AppUser.recommendedPrivateKey = "SA3WJAENZCZ4FNV7NSQTDRSTESYSXGE37BIZHMIVASH3WDEW6MZF32P4";
+                  publicController.text = "GBDZLZW3DGVD7B75K4B5X5EFXUNQVNIXYKX2YZLRB2EXJ6TND4VYVDAY";
+                  privateController.text = "SB3KH4K7JIOZSZROGR6LF5PMJ6CWZOWI7JTB5T7ZMS4NGRUQ2ECGAHQD";
+                  AppUser.recommendedPublicKey = "GC3MFYNYKFNIGR5SDCERGUDTUO644XTNJAHLSVOIU4KMC6JY5O4Q7GAC";
+                  AppUser.recommendedPrivateKey = "SAVNYFPJYPPGYSASJE24V5F5RKI3C25CAAC33BD6DDVNCJAWQJQTXNM6";
                   this.setState(() {
                     userWalletSelected = false;
                   });

@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Pages/Home.dart';
 import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
+
+import 'CustomDialog.dart';
 
 class BuyDialog extends StatefulWidget {
   @override
   _BuyDialogState createState() => _BuyDialogState();
 
   final Highlight highlight;
-  BuyDialog(this.highlight);
+  final HomeState home;
+  BuyDialog(this.highlight, this.home);
 }
 
 class _BuyDialogState extends State<BuyDialog> {
@@ -81,8 +85,33 @@ class _BuyDialogState extends State<BuyDialog> {
                         setState(() {
                           loading = true;
                         });
-                        await StellarInterface.purchaseToken(widget.highlight.issuerAddress, "100");
-                        // TODO: Success dialog
+                        bool success = await StellarInterface.purchaseToken(widget.highlight.issuerAddress, widget.highlight.price.toString());
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        if (success) {
+                          double price = widget.highlight.price!;
+                          print(price);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialog("Successfully Bought", "NFT has successfully been bought for\n$price XLM!", "", "Done", null, () {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                          );
+                          setState(() {
+                            widget.home.initState();
+                          });
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialog("An Error Occurred", "NFT purchase has had an error.", "", "Done", null, () {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                          );
+                        }
                       },
                       child: loading ? CircularProgressIndicator(
                         color: AppColors.white,

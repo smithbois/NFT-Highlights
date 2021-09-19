@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Pages/Home.dart';
 import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppButtons.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
@@ -13,8 +14,10 @@ import 'package:mobile_app/Widgets/SellDialog.dart';
 import 'package:video_player/video_player.dart';
 
 class ViewHighlight extends StatefulWidget {
-  ViewHighlight(this.highlight);
   final Highlight highlight;
+  final HomeState home;
+
+  ViewHighlight(this.highlight, this.home);
 
   @override
   _ViewHighlightState createState() => _ViewHighlightState();
@@ -235,7 +238,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return BuyDialog(widget.highlight);
+                      return BuyDialog(widget.highlight, widget.home);
                     },
                   );
                 }, "Buy Now", screenWidth)

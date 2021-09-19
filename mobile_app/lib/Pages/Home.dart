@@ -10,10 +10,10 @@ import 'package:mobile_app/Widgets/AppColors.dart';
 
 class Home extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
 
   List<Highlight> ownedClips = [];
   List<Highlight> recommendedList = [];
@@ -158,7 +158,7 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ViewHighlight(highlight),
+            builder: (context) => ViewHighlight(highlight, this),
         ));
       },
       child: SizedBox(

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Pages/ViewHighlight.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override
@@ -10,8 +13,37 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  static String clientID = "2q3fztm320kn3bnqlnv4go1kih7kxr";
+  static String clientSecret = "oghle2l2xz41f2xp21j9sxvfeozuyz";
+
+  static Future<void> issuerAddressToHighlight(String issuerAddress) async {
+    String authEndpointLink = "https://id.twitch.tv/oauth2/token?client_id=$clientID&client_secret="
+        "$clientSecret&grant_type=client_credentials";
+    var authResponse = await http.post(Uri.parse(authEndpointLink));
+    if (authResponse.statusCode != 200) {
+      throw Exception(authResponse.body);
+    }
+    print(authResponse.body);
+    String accessToken = json.decode(authResponse.body)["access_token"];
+
+    String url = "ProudFrailBaconTheThing-tRPO0Tntsv-z5dzO"; // TODO
+    String endpointLink = "https://api.twitch.tv/helix/clips?id=$url";
+    Map<String, String>? requestHeader = {
+      "Authorization": "Bearer $accessToken",
+      "Client-Id": clientID,
+    };
+    var response = await http.get(Uri.parse(endpointLink), headers: requestHeader);
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
+    print(response.body);
+
+    //return new Highlight(name, url, lastSold, price, ownerAddress, hash, preview);
+  }
+
   @override
   Widget build(BuildContext context) {
+    issuerAddressToHighlight("");
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     List<Highlight> recommendedList = [

@@ -1,9 +1,11 @@
 import 'dart:core';
 
 class Highlight {
-  Highlight(this.name, this.url, this.lastSold, this.price, this.ownerAddress, this.hash, this.preview);
+  Highlight(this.name, this.streamer, this.views, this.url, this.lastSold, this.price, this.ownerAddress, this.hash, this.preview);
 
   String name; // Name of clip from Twitch
+  String streamer; // Name of the streamer
+  int views;
   String url; // Url to clip on Twitch
   double lastSold; // Last sold price in XLM
   double? price; // Current price in XLM, if it is up for sale. Otherwise it is null

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile_app/Models/AppUser.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Widgets/AppButtons.dart';
@@ -42,7 +43,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.gray,
         appBar: AppBar(
-          title: Text(widget.highlight.name),
+          title: Text("NFT Highlights"),
           backgroundColor: AppColors.primary,
         ),
         body: Column(
@@ -87,7 +88,22 @@ class _ViewHighlightState extends State<ViewHighlight> {
             widget.highlight.ownerAddress == AppUser.publicKey ? Column(
               children: [
                 Text(
-                  "Last sold for ${widget.highlight.lastSold} XLM",
+                  "${widget.highlight.streamer}: ${widget.highlight.name}",
+                  style: TextStyle(
+                    fontSize: screenHeight / 40,
+                  ),
+                ),
+                SizedBox(height: screenHeight / 200),
+                Text(
+                  "Last sold for ${NumberFormat("###,###.0").format(widget.highlight.lastSold)} XLM",
+                  style: TextStyle(
+                    fontSize: screenHeight / 60,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                SizedBox(height: screenHeight / 100),
+                Text(
+                  "${NumberFormat("###,###").format(widget.highlight.views)} views",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,
@@ -104,7 +120,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   icon: Icon(Icons.copy),
                   label: Text("Copy Hash"),
                 ),
-                SizedBox(height: screenHeight / 2.6),
+                SizedBox(height: screenHeight / 3.2),
                 AppButtons.getButton(() {
                   showDialog(
                     context: context,
@@ -117,15 +133,30 @@ class _ViewHighlightState extends State<ViewHighlight> {
             ) : Column(
               children: [
                 Text(
-                  "Sale price: ${widget.highlight.price} XLM",
+                  "${widget.highlight.streamer}: ${widget.highlight.name}",
+                  style: TextStyle(
+                    fontSize: screenHeight / 40,
+                  ),
+                ),
+                SizedBox(height: screenHeight / 200),
+                Text(
+                  "For sale: ${NumberFormat("###.0").format(widget.highlight.price)} XLM",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
-                SizedBox(height: screenHeight / 200),
+                SizedBox(height: screenHeight / 100),
                 Text(
-                  "Last sold: ${widget.highlight.lastSold} XLM",
+                  "Last sold for ${NumberFormat("###,###.0").format(widget.highlight.lastSold)} XLM",
+                  style: TextStyle(
+                    fontSize: screenHeight / 60,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                SizedBox(height: screenHeight / 100),
+                Text(
+                  "${NumberFormat("###,###").format(widget.highlight.views)} views",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,
@@ -142,7 +173,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   icon: Icon(Icons.copy),
                   label: Text("Copy Hash"),
                 ),
-                SizedBox(height: screenHeight / 2.6),
+                SizedBox(height: screenHeight / 3.2),
                 AppButtons.getButton(() {
                   //TODO
                   showDialog(

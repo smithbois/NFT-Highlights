@@ -58,7 +58,7 @@ class StellarInterface {
           // https://clips-media-assets2.twitch.tv/AT-cm%7C1323884122-preview-480x272.jpg
 
           print(issuerAddress);
-          Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), double.parse(lastSold), ownerAddress, hash, thumbnailUrl, issuerAddress);
+          Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), null, ownerAddress, hash, thumbnailUrl, issuerAddress);
           ownedHighlights.add(h);
 
 

@@ -7,12 +7,13 @@ import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Widgets/AppButtons.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
 import 'package:mobile_app/Widgets/BuyDialog.dart';
+import 'package:mobile_app/Widgets/CustomDialog.dart';
 import 'package:mobile_app/Widgets/SellDialog.dart';
 import 'package:video_player/video_player.dart';
 
 class ViewHighlight extends StatefulWidget {
   ViewHighlight(this.highlight);
-  Highlight highlight;
+  final Highlight highlight;
 
   @override
   _ViewHighlightState createState() => _ViewHighlightState();
@@ -91,15 +92,28 @@ class _ViewHighlightState extends State<ViewHighlight> {
             SizedBox(height: screenHeight / 30),
             widget.highlight.ownerAddress == AppUser.publicKey ? Column(
               children: [
-                Text(
-                  "${widget.highlight.streamer}: ${widget.highlight.name}",
-                  style: TextStyle(
-                    fontSize: screenHeight / 40,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
+                  child: Text(
+                    "${widget.highlight.streamer}: ${widget.highlight.name}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: screenHeight / 40,
+                    ),
                   ),
                 ),
                 SizedBox(height: screenHeight / 200),
                 Text(
                   "Last sold for ${NumberFormat("###,###.0").format(widget.highlight.lastSold)} XLM",
+                  style: TextStyle(
+                    fontSize: screenHeight / 60,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                if (widget.highlight.price != null) SizedBox(height: screenHeight / 100),
+                if (widget.highlight.price != null) Text(
+                  "Your current listing: ${NumberFormat("###,###.0").format(widget.highlight.price)} XLM",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,
@@ -124,7 +138,7 @@ class _ViewHighlightState extends State<ViewHighlight> {
                   icon: Icon(Icons.copy),
                   label: Text("Copy Hash"),
                 ),
-                SizedBox(height: screenHeight / 3.2),
+                SizedBox(height: widget.highlight.price == null ? screenHeight / 3.2 : screenHeight / 4),
                 widget.highlight.price == null ? AppButtons.getButton(() {
                   showDialog(
                     context: context,
@@ -133,15 +147,30 @@ class _ViewHighlightState extends State<ViewHighlight> {
                     },
                   );
                 }, "List for sale", screenWidth) : AppButtons.getButton(() {
-                  // TODO
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialog("Remove listing?", "Are you sure you want to\nremove your NFT from the market?", "Cancel", "Confirm", () {
+                        Navigator.of(context).pop();
+                      }, () {
+                        // TODO remove from blockchain
+                        widget.highlight.price = null;
+                      });
+                    },
+                  );
                 }, "Remove from listing", screenWidth)
               ],
             ) : Column(
               children: [
-                Text(
-                  "${widget.highlight.streamer}: ${widget.highlight.name}",
-                  style: TextStyle(
-                    fontSize: screenHeight / 40,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
+                  child: Text(
+                    "${widget.highlight.streamer}: ${widget.highlight.name}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: screenHeight / 40,
+                    ),
                   ),
                 ),
                 SizedBox(height: screenHeight / 200),
@@ -155,14 +184,6 @@ class _ViewHighlightState extends State<ViewHighlight> {
                 SizedBox(height: screenHeight / 100),
                 Text(
                   "Last sold for ${NumberFormat("###,###.0").format(widget.highlight.lastSold)} XLM",
-                  style: TextStyle(
-                    fontSize: screenHeight / 60,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                if (widget.highlight.price != null) SizedBox(height: screenHeight / 100),
-                if (widget.highlight.price != null) Text(
-                  "Your current listing: ${NumberFormat("###,###.0").format(widget.highlight.price)} XLM",
                   style: TextStyle(
                     fontSize: screenHeight / 60,
                     fontStyle: FontStyle.italic,

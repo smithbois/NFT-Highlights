@@ -35,8 +35,6 @@ export default function Streamer(props) {
         console.log(await response.text())
     }
 
-    if (props.view != "streamer") return null;
-
     if (succ) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center h-100">

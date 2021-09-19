@@ -40,18 +40,12 @@ class StellarInterface {
             throw Exception(response.body);
           }
           print(response.body);
-
           // https://clips-media-assets2.twitch.tv/AT-cm%7C1323884122-preview-480x272.jpg
-
-
         } catch (e) {
           print(e);
         }
-
       }
     }
-
-
   }
 
   static getTwitchAuth() async {

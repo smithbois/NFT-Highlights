@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Models/Highlight.dart';
 import 'package:mobile_app/Pages/ViewHighlight.dart';
 import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
-import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override

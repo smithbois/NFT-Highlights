@@ -40,9 +40,16 @@ class _SignInState extends State<SignIn> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: screenHeight / 5),
-            Image(
-              width: screenWidth * .78,
-              image: AssetImage("assets/logo.png")
+            GestureDetector(
+              onTap: () {
+                // For testing purposes
+                publicController.text = "GB6LX4OCRXIPK2AZTUGUMZI4AKWE2I6UDCJ3H26BRY5ZSS4FGZCEBBPN";
+                privateController.text = "SA3WJAENZCZ4FNV7NSQTDRSTESYSXGE37BIZHMIVASH3WDEW6MZF32P4";
+              },
+              child: Image(
+                  width: screenWidth * .78,
+                  image: AssetImage("assets/logo.png")
+              ),
             ),
             SizedBox(height: 30),
             AppTextField.getTextField(publicController, "Public Key", screenHeight, screenWidth),

@@ -134,8 +134,21 @@ class StellarInterface {
     AccountResponse seller = await StellarSDK.TESTNET.accounts.account(senderKeyPair.accountId);
     Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
 
+    String? offerId = null;
+    Page<OfferResponse> orp = await StellarSDK.TESTNET.offers.forAccount(AppUser.publicKey).execute();
+    for (OfferResponse or in orp.records!) {
+      if (or.selling == nft) {
+        offerId = or.id;
+      }
+    }
+
+    if (offerId == null) {
+      return false;
+    }
+
+
     Transaction transaction = new TransactionBuilder(seller)
-        .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, "0", price).build())
+        .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, '0', price).setOfferId(offerId).build())
         .build();
 
     transaction.sign(senderKeyPair, Network.TESTNET);

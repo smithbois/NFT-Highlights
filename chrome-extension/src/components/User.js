@@ -96,8 +96,6 @@ export default function User(props) {
         setBuyState("initial")
     }
 
-    if (props.view !== "user") return null;
-
     if (buyState === "success") {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center h-100">

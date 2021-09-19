@@ -1,11 +1,12 @@
 import 'package:mobile_app/Models/AppUser.dart';
+import 'package:mobile_app/Models/Highlight.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StellarInterface {
-  static getUserHighlights() async {
-    AccountResponse account = await StellarSDK.TESTNET.accounts.account(AppUser.publicKey);
+  static getUserHighlights(String publicAddress, [dynamic updateStateCallback]) async {
+    AccountResponse account = await StellarSDK.TESTNET.accounts.account(publicAddress);
     List<Balance?> balances = [];
     if (account.balances != null) {
       balances = account.balances!;
@@ -23,11 +24,14 @@ class StellarInterface {
 
     String twitchAccessToken = await getTwitchAuth();
 
+    List<Highlight> ownedHighlights = [];
+
     for (String issuerAddress in issuerAddresses) {
       AccountResponse account = await StellarSDK.TESTNET.accounts.account(issuerAddress);
       if (account.data != null) {
         try {
           String url = new String.fromCharCodes(base64Decode(account.data!['highlightURL']));
+          String lastSold = new String.fromCharCodes(base64Decode(account.data!['lastSold']));
           print(url);
 
           String endpointLink = "https://api.twitch.tv/helix/clips?id=$url";
@@ -40,12 +44,32 @@ class StellarInterface {
             throw Exception(response.body);
           }
           print(response.body);
+          var data = json.decode(response.body)['data'][0];
+          String name = data['title'];
+          String streamer = data['broadcaster_name'];
+          int viewCount = data['view_count'];
+          String thumbnailUrl = data['thumbnail_url'];
+          String fileUrl = thumbnailUrl.substring(0, thumbnailUrl.length-20) + ".mp4";
+          print(fileUrl);
+
+          String ownerAddress = AppUser.publicKey;
+          String hash = account.hashCode.toString();
           // https://clips-media-assets2.twitch.tv/AT-cm%7C1323884122-preview-480x272.jpg
+
+
+          Highlight h = new Highlight(name, fileUrl, double.parse(lastSold), double.parse(lastSold), ownerAddress, hash, thumbnailUrl);
+          ownedHighlights.add(h);
+
+
         } catch (e) {
           print(e);
         }
       }
     }
+
+    AppUser.ownedHighlights = ownedHighlights;
+    print('finished getting owned highlights');
+    updateStateCallback();
   }
 
   static getTwitchAuth() async {

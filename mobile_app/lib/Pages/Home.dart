@@ -16,6 +16,8 @@ class _HomeState extends State<Home> {
 
   List<Highlight> ownedClips = [];
   List<Highlight> recommendedList = [];
+  double balance = 0;
+
 
   @override
   void initState() {
@@ -31,18 +33,25 @@ class _HomeState extends State<Home> {
         recommendedList = AppUser.recommendedHighlights;
       });
     };
+    var updateBalanceCallback = () {
+      print('updating state due to retrieved balance');
+      this.setState(() {
+        balance = AppUser.balance;
+      });
+    };
     StellarInterface.getUserHighlights(AppUser.publicKey, updateOwnedListCallback);
     StellarInterface.getUserHighlights(AppUser.recommendedPublicKey, updateRecommendedListCallback, false);
+    StellarInterface.getBalance(AppUser.publicKey, updateBalanceCallback);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('building home screen');
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
-    String balance = "1,000 XLM"; //TODO
+    String balanceText = "$balance XLM"; //TODO: Formatting
+    print(balanceText);
 
     List<Widget> recommendedListWidgets = [SizedBox(width: 12)];
     for (Highlight h in recommendedList) {
@@ -83,7 +92,7 @@ class _HomeState extends State<Home> {
                     children: [
                       Spacer(),
                       Text(
-                        balance,
+                        balanceText,
                         style: TextStyle(
                           fontSize: screenHeight / 50,
                         ),

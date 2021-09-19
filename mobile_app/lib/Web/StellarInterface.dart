@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class StellarInterface {
 
-  static getBalance(String publicAddress) async {
+  static getBalance(String publicAddress, [var callback]) async {
     AccountResponse account = await StellarSDK.TESTNET.accounts.account(publicAddress);
     List<Balance?> balances = [];
     if (account.balances != null) {
@@ -14,7 +14,11 @@ class StellarInterface {
     }
     for (Balance? balance in balances) {
       if (balance != null && balance.assetType == 'native') {
-        return balance.balance;
+        print('User balance: ${balance.balance}');
+        AppUser.balance = double.parse(balance.balance!);
+        if (callback != null) {
+          callback();
+        }
       }
     }
   }

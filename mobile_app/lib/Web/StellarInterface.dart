@@ -5,6 +5,20 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StellarInterface {
+
+  static getBalance(String publicAddress) async {
+    AccountResponse account = await StellarSDK.TESTNET.accounts.account(publicAddress);
+    List<Balance?> balances = [];
+    if (account.balances != null) {
+      balances = account.balances!;
+    }
+    for (Balance? balance in balances) {
+      if (balance != null && balance.assetType == 'native') {
+        return balance.balance;
+      }
+    }
+  }
+
   static getUserHighlights(String publicAddress, [dynamic updateStateCallback, bool isOwned=true]) async {
     AccountResponse account = await StellarSDK.TESTNET.accounts.account(publicAddress);
     List<Balance?> balances = [];

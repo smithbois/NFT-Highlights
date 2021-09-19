@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
 
 class BuyDialog extends StatefulWidget {
@@ -82,7 +83,8 @@ class _BuyDialogState extends State<BuyDialog> {
                         setState(() {
                           loading = true;
                         });
-                        // TODO list for sale
+                        await StellarInterface.purchaseToken(widget.highlight.issuerAddress, "100");
+                        // TODO: Success dialog
                       },
                       child: loading ? CircularProgressIndicator(
                         color: AppColors.white,

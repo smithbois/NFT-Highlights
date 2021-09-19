@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StellarInterface {
-  static getUserHighlights(String publicAddress, [dynamic updateStateCallback]) async {
+  static getUserHighlights(String publicAddress, [dynamic updateStateCallback, bool isOwned=true]) async {
     AccountResponse account = await StellarSDK.TESTNET.accounts.account(publicAddress);
     List<Balance?> balances = [];
     if (account.balances != null) {
@@ -16,8 +16,9 @@ class StellarInterface {
     for (Balance? balance in balances) {
       if (balance != null && balance.assetCode == "Highlight") {
         // This is one of our NFTs
-        if (balance.assetIssuer != null) {
+        if (balance.assetIssuer != null && double.parse(balance.balance!) >= 1) {
           issuerAddresses.add(balance.assetIssuer!);
+          print(balance.balance);
         }
       }
     }
@@ -52,12 +53,12 @@ class StellarInterface {
           String fileUrl = thumbnailUrl.substring(0, thumbnailUrl.length-20) + ".mp4";
           print(fileUrl);
 
-          String ownerAddress = AppUser.publicKey;
+          String ownerAddress = publicAddress;
           String hash = account.hashCode.toString();
           // https://clips-media-assets2.twitch.tv/AT-cm%7C1323884122-preview-480x272.jpg
 
-
-          Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), double.parse(lastSold), ownerAddress, hash, thumbnailUrl);
+          print(issuerAddress);
+          Highlight h = new Highlight(name, streamer, viewCount, fileUrl, double.parse(lastSold), double.parse(lastSold), ownerAddress, hash, thumbnailUrl, issuerAddress);
           ownedHighlights.add(h);
 
 
@@ -67,9 +68,45 @@ class StellarInterface {
       }
     }
 
-    AppUser.ownedHighlights = ownedHighlights;
+    if (isOwned) {
+      AppUser.ownedHighlights = ownedHighlights;
+    } else {
+      AppUser.recommendedHighlights = ownedHighlights;
+    }
+
     print('finished getting owned highlights');
     updateStateCallback();
+  }
+  
+  static putTokenForSale(String issuerAddress, String price) async {
+    KeyPair senderKeyPair = KeyPair.fromSecretSeed(AppUser.privateKey);
+    
+    AccountResponse seller = await StellarSDK.TESTNET.accounts.account(senderKeyPair.accountId);
+    Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
+
+    Transaction transaction = new TransactionBuilder(seller)
+      .addOperation(ManageSellOfferOperationBuilder(nft, Asset.NATIVE, "1", '100').build())
+      .build();
+
+    transaction.sign(senderKeyPair, Network.TESTNET);
+    SubmitTransactionResponse response = await StellarSDK.TESTNET.submitTransaction(transaction);
+    print(response.strResultXdr);
+  }
+
+  static purchaseToken(String issuerAddress, String price) async {
+    KeyPair senderKeyPair = KeyPair.fromSecretSeed(AppUser.privateKey);
+
+    AccountResponse buyer = await StellarSDK.TESTNET.accounts.account(senderKeyPair.accountId);
+    Asset nft = AssetTypeCreditAlphaNum12("Highlight", issuerAddress);
+
+    Transaction transaction = new TransactionBuilder(buyer)
+        .addOperation(ChangeTrustOperationBuilder(nft, "1").build())
+        .addOperation(ManageBuyOfferOperationBuilder(Asset.NATIVE, nft, "1", "100").build())
+        .build();
+
+    transaction.sign(senderKeyPair, Network.TESTNET);
+    SubmitTransactionResponse response = await StellarSDK.TESTNET.submitTransaction(transaction);
+    print(response.success);
   }
 
   static getTwitchAuth() async {

@@ -1,7 +1,7 @@
 import 'dart:core';
 
 class Highlight {
-  Highlight(this.name, this.streamer, this.views, this.url, this.lastSold, this.price, this.ownerAddress, this.hash, this.preview);
+  Highlight(this.name, this.streamer, this.views, this.url, this.lastSold, this.price, this.ownerAddress, this.hash, this.preview, this.issuerAddress);
 
   String name; // Name of clip from Twitch
   String streamer; // Name of the streamer
@@ -12,4 +12,5 @@ class Highlight {
   String ownerAddress; // Name of current owner of the NFT
   String hash; // Hash of the NFT
   String preview; // Url to clip preview image
+  String issuerAddress; // Address of account that issued NFT
 }

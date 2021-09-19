@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Models/Highlight.dart';
+import 'package:mobile_app/Web/StellarInterface.dart';
 import 'package:mobile_app/Widgets/AppColors.dart';
 
 class SellDialog extends StatefulWidget {
@@ -20,6 +21,8 @@ class _SellDialogState extends State<SellDialog> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+
+    // TODO: Get the price from the textbook
 
     return Align(
       child: SizedBox(
@@ -87,7 +90,8 @@ class _SellDialogState extends State<SellDialog> {
                           setState(() {
                             loading = true;
                           });
-                          // TODO list for sale
+                          await StellarInterface.putTokenForSale(widget.highlight.issuerAddress, "100");
+                          // TODO: Success message
                         }
                       },
                       child: loading ? CircularProgressIndicator(

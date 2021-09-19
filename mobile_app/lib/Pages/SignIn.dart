@@ -16,6 +16,9 @@ class _SignInState extends State<SignIn> {
   late TextEditingController publicController;
   late TextEditingController privateController;
 
+  // for testing purposes only
+  bool userWalletSelected = false;
+
   @override
   void initState() {
     publicController = new TextEditingController();
@@ -42,9 +45,26 @@ class _SignInState extends State<SignIn> {
             SizedBox(height: screenHeight / 5),
             GestureDetector(
               onTap: () {
-                // For testing purposes
-                publicController.text = "GB6LX4OCRXIPK2AZTUGUMZI4AKWE2I6UDCJ3H26BRY5ZSS4FGZCEBBPN";
-                privateController.text = "SA3WJAENZCZ4FNV7NSQTDRSTESYSXGE37BIZHMIVASH3WDEW6MZF32P4";
+                // For testing purposes, prefill keys for a user wallet
+                if (!userWalletSelected) {
+                  publicController.text = "GB6LX4OCRXIPK2AZTUGUMZI4AKWE2I6UDCJ3H26BRY5ZSS4FGZCEBBPN";
+                  privateController.text = "SA3WJAENZCZ4FNV7NSQTDRSTESYSXGE37BIZHMIVASH3WDEW6MZF32P4";
+                  AppUser.recommendedPublicKey = "GA6T4UQPRBE3ZCVGWKEOHRDDNPY2NHA7Q5QNHTFZVPHEBRRXN5PP4MKQ";
+                  AppUser.recommendedPrivateKey = "SBRKXHAXYRUK74ARFFJFTNXGWJPCTNBIVZXQWRTYMVJR7UQLUHENOA3Z";
+                  this.setState(() {
+                    userWalletSelected = true;
+                  });
+                } else {
+                  // for testing only, prefill keys for the reccomended wallet
+                  publicController.text = "GA6T4UQPRBE3ZCVGWKEOHRDDNPY2NHA7Q5QNHTFZVPHEBRRXN5PP4MKQ";
+                  privateController.text = "SBRKXHAXYRUK74ARFFJFTNXGWJPCTNBIVZXQWRTYMVJR7UQLUHENOA3Z";
+                  AppUser.recommendedPublicKey = "GB6LX4OCRXIPK2AZTUGUMZI4AKWE2I6UDCJ3H26BRY5ZSS4FGZCEBBPN";
+                  AppUser.recommendedPrivateKey = "SA3WJAENZCZ4FNV7NSQTDRSTESYSXGE37BIZHMIVASH3WDEW6MZF32P4";
+                  this.setState(() {
+                    userWalletSelected = false;
+                  });
+                }
+
               },
               child: Image(
                   width: screenWidth * .78,

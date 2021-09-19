@@ -14,12 +14,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   List<Highlight> ownedClips = [];
-  List<Highlight> recommendedList = [
-    new Highlight("Destroys a Hacker", "Ninja", 12345, "https://production.assets.clips.twitchcdn.net/AT-cm%7C1324683848.mp4?sig=12996e53ea6dfd221f33fa726ab6ca1b49f87d37&token=%7B%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22clip_uri%22%3A%22https%3A%2F%2Fproduction.assets.clips.twitchcdn.net%2FAT-cm%257C1324683848.mp4%22%2C%22device_id%22%3A%224cd9ba0400af2936%22%2C%22expires%22%3A1632056567%2C%22user_id%22%3A%22727572874%22%2C%22version%22%3A2%7D", 4192123, 100, "nick o1iu24poi1u42l1kj4;klj;lrkj;LKFJA;LKJF;ALSJF;LKAJFSD;LKJ", "ALKJDFLKJALKSJF", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_UQcEmQDcQST9jztaIhTvStxK9mll2CQ_4Q&usqp=CAU"),
-    new Highlight("Goes beastmode", "Shroud", 235235, "https://production.assets.clips.twitchcdn.net/AT-cm%7C1324683848.mp4?sig=12996e53ea6dfd221f33fa726ab6ca1b49f87d37&token=%7B%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22clip_uri%22%3A%22https%3A%2F%2Fproduction.assets.clips.twitchcdn.net%2FAT-cm%257C1324683848.mp4%22%2C%22device_id%22%3A%224cd9ba0400af2936%22%2C%22expires%22%3A1632056567%2C%22user_id%22%3A%22727572874%22%2C%22version%22%3A2%7D", 332, 100, "nick o1iu24poi1u42l1kj4;klj;lrkj;LKFJA;LKJF;ALSJF;LKAJFSD;LKJ", "ALKJDFLKJALKSJF", "https://i.ytimg.com/vi/YklKZQTZJ6g/maxresdefault.jpg"),
-    new Highlight("Ninja and Drake play Fortnite", "Drake", 2352353, "https://production.assets.clips.twitchcdn.net/AT-cm%7C1324683848.mp4?sig=12996e53ea6dfd221f33fa726ab6ca1b49f87d37&token=%7B%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22clip_uri%22%3A%22https%3A%2F%2Fproduction.assets.clips.twitchcdn.net%2FAT-cm%257C1324683848.mp4%22%2C%22device_id%22%3A%224cd9ba0400af2936%22%2C%22expires%22%3A1632056567%2C%22user_id%22%3A%22727572874%22%2C%22version%22%3A2%7D", 6233, 100, "nick o1iu24poi1u42l1kj4;klj;lrkj;LKFJA;LKJF;ALSJF;LKAJFSD;LKJ", "ALKJDFLKJALKSJF", "https://cdn.vox-cdn.com/thumbor/uekGnbouSy0tnfiiwT-7lYduZfM=/0x0:1264x696/1400x933/filters:focal(424x243:626x445):no_upscale()/cdn.vox-cdn.com/uploads/chorus_image/image/59343895/Screen_Shot_2018_04_10_at_6.19.26_PM.1523409062.png"),
-    new Highlight("Donda performance", "Kanye", 235232, "https://production.assets.clips.twitchcdn.net/AT-cm%7C1324683848.mp4?sig=12996e53ea6dfd221f33fa726ab6ca1b49f87d37&token=%7B%22authorization%22%3A%7B%22forbidden%22%3Afalse%2C%22reason%22%3A%22%22%7D%2C%22clip_uri%22%3A%22https%3A%2F%2Fproduction.assets.clips.twitchcdn.net%2FAT-cm%257C1324683848.mp4%22%2C%22device_id%22%3A%224cd9ba0400af2936%22%2C%22expires%22%3A1632056567%2C%22user_id%22%3A%22727572874%22%2C%22version%22%3A2%7D", 1241, 100, "nick o1iu24poi1u42l1kj4;klj;lrkj;LKFJA;LKJF;ALSJF;LKAJFSD;LKJ", "ALKJDFLKJALKSJF", "https://www.rollingstone.com/wp-content/uploads/2021/08/kanye-west-donda-review.jpg"),
-  ];
+  List<Highlight> recommendedList = [];
 
   @override
   void initState() {
@@ -29,7 +24,14 @@ class _HomeState extends State<Home> {
         ownedClips = AppUser.ownedHighlights;
       });
     };
+    var updateRecommendedListCallback = () {
+      print('updating state');
+      this.setState(() {
+        recommendedList = AppUser.recommendedHighlights;
+      });
+    };
     StellarInterface.getUserHighlights(AppUser.publicKey, updateOwnedListCallback);
+    StellarInterface.getUserHighlights(AppUser.recommendedPublicKey, updateRecommendedListCallback, false);
     super.initState();
   }
 

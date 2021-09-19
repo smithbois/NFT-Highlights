@@ -82,28 +82,25 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColors.gray,
+        appBar: AppBar(
+          title: Text("NFT Highlights"),
+        ),
         body: Column(
           children: [
-            SafeArea(
-              child: Column(
-                children: [
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Spacer(),
-                      Text(
-                        balanceText,
-                        style: TextStyle(
-                          fontSize: screenHeight / 50,
-                        ),
-                      ),
-                      SizedBox(width: 30),
-                    ],
-                  )
-                ],
-              )
+            SizedBox(height: screenHeight / 50),
+            Row(
+              children: [
+                Spacer(),
+                Text(
+                  balanceText,
+                  style: TextStyle(
+                    fontSize: screenHeight / 50,
+                  ),
+                ),
+                SizedBox(width: screenWidth / 25),
+              ],
             ),
-            Spacer(),
+            SizedBox(height: screenHeight / 80),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(

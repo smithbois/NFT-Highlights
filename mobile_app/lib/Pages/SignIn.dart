@@ -79,7 +79,7 @@ class _SignInState extends State<SignIn> {
             AppButtons.getButton(() {
               AppUser.publicKey = publicController.text;
               AppUser.privateKey = privateController.text;
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => Home()
               ));
             }, "Login", screenWidth),
